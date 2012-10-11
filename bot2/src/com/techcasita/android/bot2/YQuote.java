@@ -1,4 +1,4 @@
-// Android Bots by Wolf Paulus is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
 package com.techcasita.android.bot2;
 
 import android.os.AsyncTask;
@@ -25,18 +25,18 @@ import java.util.Map;
  * l1 = Last Trade (Price Only)
  * p = Previous Close
  * c = Change & Percent Change
+ *
+ * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  */
 public class YQuote extends AsyncTask<String, Void, String> {
-    private static final URI SERVICE_WS_URI = URI.create("http://finance.yahoo.com/d/quotes.csv?s=");
+    private static final URI SERVICE_WS_URI = URI.create("http://download.finance.yahoo.com/d/quotes.csv?s=");
     private static final String FORMAT_PARM = "&f=nl1pc";
     private static final int TIMEOUT_MS = 7500;
-
     private final Handler mHandler;
 
     public YQuote(Handler mHandler) {
         this.mHandler = mHandler;
     }
-
 
     @Override
     protected String doInBackground(final String... symbols) {
@@ -67,16 +67,18 @@ public class YQuote extends AsyncTask<String, Void, String> {
         map.put("previousclose", null);
         map.put("change", null);
         map.put("percentagechange", null);
-        String[] sa = csv.split(",");
-        if (1 <= sa.length) map.put("name", sa[0].replace("\"", ""));
-        if (2 <= sa.length) map.put("last", "$ " + sa[1]);
-        if (3 <= sa.length) map.put("previousclose", "$ " + sa[2]);
-        if (4 <= sa.length) {
-            String[] saa = sa[3].split(" - ");
+
+        final int k = csv.indexOf("\"", 1);  // 2nd Quote character in String
+        final String[] sa = csv.substring(k + 2).split(",");
+        map.put("name", csv.substring(0, k).replace("\"", ""));
+        if (1 <= sa.length) map.put("last", "$ " + sa[0]);
+        if (2 <= sa.length) map.put("previousclose", "$ " + sa[1]);
+        if (3 <= sa.length) {
+            final String[] saa = sa[2].split(" - ");
             if (1 <= saa.length) map.put("change", saa[0].replace("\"", ""));
             if (2 <= saa.length) map.put("percentagechange", saa[1].replace("\"", ""));
         }
-        String s;
+        final String s;
         if (map.containsKey(Exception.class.getSimpleName())) {
             s = "Maybe a Server Problem ?";
         } else if ("$ 0.00".equals(map.get("last"))) {

@@ -3,6 +3,7 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:onClick="onClick"
         >
     <TextView style="@android:style/TextAppearance.Large"
               android:id="@+id/tv_stt"
@@ -15,7 +16,7 @@
               android:textColor="@android:color/darker_gray"
               android:layout_alignParentTop="true"
               android:gravity="center"
-              android:singleLine="true"
+              android:singleLine="false"
             />
     <TextView style="@android:style/TextAppearance.Large"
               android:id="@+id/tv_tts"
