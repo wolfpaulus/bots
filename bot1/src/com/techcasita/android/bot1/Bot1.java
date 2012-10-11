@@ -1,4 +1,4 @@
-// Android Bots by Wolf Paulus is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
 package com.techcasita.android.bot1;
 
 import android.app.Activity;
@@ -8,16 +8,22 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * <code>Bot1</code> is a simple <i>Echo Bot</i>, capturing voice input, converting it in to text,
+ * synthesizing the text into speech.
+ *
+ * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
+ */
 public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
-    private static final String UTTERANCE_ID = "BOT1_123";
+    private static final String UTTERANCE_ID = Bot1.class.getSimpleName();
 
     private TextView mTV_TTS;
     private TextView mTV_STT;
@@ -37,7 +43,7 @@ public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
         List<ResolveInfo> activities = getPackageManager().queryIntentActivities(
                 new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         if (activities.size() == 0) {
-            mTV_TTS.setText("Recognizer not present");
+            mTV_TTS.setText(R.string.err_Recognizer);
         }
         // Setup Text to Speech via InitListener
         try {
@@ -51,29 +57,58 @@ public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
     public void onInit(final int status) {
         // status can be either TextToSpeech.SUCCESS or TextToSpeech.ERROR.
         if (status == TextToSpeech.SUCCESS && mTts != null) {
-            mTts.setSpeechRate(1.0f);
-            mTts.setPitch(1.5f);
-            // Set preferred language to US english.
-            // Note that a language may not be available, and the result will indicate this.
-            final int result = mTts.setLanguage(0 <= mTts.isLanguageAvailable(Locale.UK) ? Locale.UK : Locale.US);
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                mTV_TTS.setText("Language is not available.");
-            } else {
-                startVoiceRecognitionActivity();
-            }
+
+            startVoiceRecognitionActivity();
+
             //
             // OnUtteranceCompletedListener
             //
+
             //noinspection deprecation
             mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
-                public void onUtteranceCompleted(String s) {
+                public void onUtteranceCompleted(final String s) {
                     startVoiceRecognitionActivity();
                 }
             });
         } else {
-            mTV_TTS.setText("Could not initialize TextToSpeech.");
+            mTV_TTS.setText(R.string.err_TextToSpeech);
         }
+    }
+
+    /**
+     * In case the speech recognizer times out, tapping on the screen restarts
+     *
+     * @param view <code.View</code> not used
+     */
+    @SuppressWarnings("UnusedParameters")
+    public void onClick(View view) {
+        startVoiceRecognitionActivity();
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        switch (requestCode) {
+            case VOICE_RECOGNITION_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    say(matches.get(0));
+                } else {
+                    mTV_STT.setText(R.string.tapScreen);
+                }
+                break;
+            default:
+                mTV_STT.setText("");
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mTts != null) {
+            mTts.shutdown();
+        }
+        super.onDestroy();
     }
 
     private void say(final String s) {
@@ -91,7 +126,7 @@ public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
         // Specify the calling package to identify your application
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
         // Display an hint to the user about what he should say.
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak to Bot1");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.speakPROMPT);
         // Given an hint to the recognizer about what the user is going to say
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         // Specify how many results you want to receive. The results will be sorted
@@ -99,27 +134,5 @@ public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, new Locale("es").getLanguage());
         startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        switch (requestCode) {
-            case VOICE_RECOGNITION_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    final ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    say(matches.get(0));
-                } else {
-                    mTV_STT.setText("");
-                }
-                break;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mTts != null) {
-            mTts.shutdown();
-        }
-        super.onDestroy();
     }
 }
