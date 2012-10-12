@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * <code>Bot1</code> is a simple <i>Echo Bot</i>, capturing voice input, converting it in to text,
+ * <code>Bot2</code> is a simple <i>Echo Bot</i>, capturing voice input, converting it in to text,
  * synthesizing the text into speech.
  * In case the spoken text contains  "stock quote for" followed by a valid ticker symbol, the most recent
  * quote for that stock is fetched, put into a template, and eventually spoken.
@@ -130,10 +130,12 @@ public class Bot2 extends Activity implements TextToSpeech.OnInitListener {
                     }
                 } else {
                     mTV_STT.setText(R.string.tapScreen);
+                    mTV_TTS.setText("");
                 }
                 break;
             default:
                 mTV_STT.setText("");
+                mTV_TTS.setText("");
                 break;
 
         }
