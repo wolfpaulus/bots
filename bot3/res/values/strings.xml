@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">bot3</string>
+    <string name="speakPROMPT">Speak to Bot3</string>
+    <string name="tapScreen">.. tap the screen to continue ..</string>
+    <!-- Error Messages -->
+    <string name="err_Recognizer">Recognizer not present.</string>
+    <string name="err_Language">Language is not available.</string>
+    <string name="err_TextToSpeech">Could not initialize TextToSpeech.</string>
 </resources>

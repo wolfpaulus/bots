@@ -1,4 +1,4 @@
-// Android Bots by Wolf Paulus is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
 package com.techcasita.android.bot3;
 
 import android.os.AsyncTask;
@@ -25,8 +25,8 @@ import java.util.List;
 public class AIML_RPC extends AsyncTask<String, Void, String> {
     private static final String LOG_TAG = AIML_RPC.class.getSimpleName();
 
-    private static final URI PANDORA_WS_URI = URI.create("http://www.pandorabots.com/pandora/talk-xml");
-    private static final String BOT_ID = "bc26c1cfbe34ce2c";   //c1
+    private static final URI WS_URI = URI.create("http://proton.techcasita.com:8080/talk-xml");
+    private static final String BOT_ID = "xght%^30YH6404uII9";
     private static final String PARAM_NAME_BOT = "botid";
     private static final String PARAM_NAME_TEXT = "input";
     private static final String PARAM_NAME_SESSION = "custid";
@@ -118,7 +118,7 @@ public class AIML_RPC extends AsyncTask<String, Void, String> {
         HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), TIMEOUT_MS);
         HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT_MS);
 
-        HttpPost httpPost = new HttpPost(PANDORA_WS_URI);
+        HttpPost httpPost = new HttpPost(WS_URI);
 
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair(PARAM_NAME_BOT, BOT_ID));
