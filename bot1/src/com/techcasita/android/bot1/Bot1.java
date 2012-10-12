@@ -126,7 +126,7 @@ public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
         // Specify the calling package to identify your application
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
         // Display an hint to the user about what he should say.
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, R.string.speakPROMPT);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getResources().getString(R.string.speakPROMPT));
         // Given an hint to the recognizer about what the user is going to say
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         // Specify how many results you want to receive. The results will be sorted
