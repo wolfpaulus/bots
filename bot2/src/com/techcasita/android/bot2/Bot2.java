@@ -32,7 +32,7 @@ public class Bot2 extends Activity implements TextToSpeech.OnInitListener {
 
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
     private static final String UTTERANCE_ID = Bot2.class.getSimpleName();
-    private static final String KEY_WORD = "stock quote for";
+    private static final String KEY_WORD = "stock quote";
 
     private TextView mTV_TTS;
     private TextView mTV_STT;

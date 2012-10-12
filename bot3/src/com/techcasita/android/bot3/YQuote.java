@@ -15,6 +15,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,8 @@ public class YQuote extends AsyncTask<String, Void, String> {
     private static final String FORMAT_PARM = "&f=nl1pc";
     private static final int TIMEOUT_MS = 7500;
     private final Handler mHandler;
+
+    private final DecimalFormat df2 = new DecimalFormat( "#,###,###,##0.00" );
 
     public YQuote(Handler mHandler) {
         this.mHandler = mHandler;
@@ -71,8 +74,14 @@ public class YQuote extends AsyncTask<String, Void, String> {
         final int k = csv.indexOf("\"", 1);  // 2nd Quote character in String
         final String[] sa = csv.substring(k + 2).split(",");
         map.put("name", csv.substring(0, k).replace("\"", ""));
-        if (1 <= sa.length) map.put("last", "$ " + sa[0]);
-        if (2 <= sa.length) map.put("previousclose", "$ " + sa[1]);
+
+        try {
+            if (1 <= sa.length) map.put("last", "$ " + df2.format(Double.valueOf(sa[0].replace("\"", ""))));
+            if (2 <= sa.length) map.put("previousclose", "$ " + df2.format(Double.valueOf(sa[1].replace("\"", ""))));
+        } catch (NumberFormatException e) {
+            // intentionally empty
+        }
+
         if (3 <= sa.length) {
             final String[] saa = sa[2].split(" - ");
             if (1 <= saa.length) map.put("change", saa[0].replace("\"", ""));
