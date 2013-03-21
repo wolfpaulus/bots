@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
+// Copyright (c) 2012-2013 Wolf Paulus - Techcasita Productions
 package com.techcasita.android.bot3;
 
 import android.app.Activity;
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * <code>Bot3</code> uses an AIML Service to compute answers:
  * capturing voice input, converting it in to text, creating an answer through AIML, before synthesizing it into speech.
@@ -31,7 +30,7 @@ public class Bot3 extends Activity implements TextToSpeech.OnInitListener {
 
     public static final String BUNDLE_KEY_NAME_FOR_MSG = Bot3.class.getName() + "_BUNDLE_KEY";
 
-    private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = R.integer.VOICE_RECOGNITION_REQUEST_CODE;
     private static final String UTTERANCE_ID = Bot3.class.getSimpleName();
     private static final String KEY_WORD = "QUOTE";  // e.g. get the stock quote for g o o g
 

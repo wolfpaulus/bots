@@ -35,7 +35,7 @@ public class YQuote extends AsyncTask<String, Void, String> {
     private static final int TIMEOUT_MS = 7500;
     private final Handler mHandler;
 
-    private final DecimalFormat df2 = new DecimalFormat( "#,###,###,##0.00" );
+    private final DecimalFormat df2 = new DecimalFormat("#,###,###,##0.00");
 
     public YQuote(Handler mHandler) {
         this.mHandler = mHandler;
@@ -63,8 +63,9 @@ public class YQuote extends AsyncTask<String, Void, String> {
      * @param csv like this: "Google Inc.",624.60,651.01,"-26.41 - -4.06%"
      */
     @Override
-    protected void onPostExecute(String csv) {
-        Map<String, String> map = new HashMap<String, String>(3);
+    protected void onPostExecute(final String csv) {
+        final String s;
+        final Map<String, String> map = new HashMap<String, String>(3);
         map.put("name", null);
         map.put("last", null);
         map.put("previousclose", null);
@@ -72,36 +73,40 @@ public class YQuote extends AsyncTask<String, Void, String> {
         map.put("percentagechange", null);
 
         final int k = csv.indexOf("\"", 1);  // 2nd Quote character in String
-        final String[] sa = csv.substring(k + 2).split(",");
-        map.put("name", csv.substring(0, k).replace("\"", ""));
-
-        try {
-            if (1 <= sa.length) map.put("last", "$ " + df2.format(Double.valueOf(sa[0].replace("\"", ""))));
-            if (2 <= sa.length) map.put("previousclose", "$ " + df2.format(Double.valueOf(sa[1].replace("\"", ""))));
-        } catch (NumberFormatException e) {
-            // intentionally empty
-        }
-
-        if (3 <= sa.length) {
-            final String[] saa = sa[2].split(" - ");
-            if (1 <= saa.length) map.put("change", saa[0].replace("\"", ""));
-            if (2 <= saa.length) map.put("percentagechange", saa[1].replace("\"", ""));
-        }
-        final String s;
-        if (map.containsKey(Exception.class.getSimpleName())) {
-            s = "Maybe a Server Problem ?";
-        } else if ("$ 0.00".equals(map.get("last"))) {
+        if (k <= 0) {
             s = "I don't think you gave me a valid TICKER symbol.";
         } else {
-            s = map.get("name") + " was last traded at "
-                    + map.get("last") + " while the previous close was at "
-                    + map.get("previousclose") + ". That constitutes a change of "
-                    + map.get("change") + " or "
-                    + map.get("percentagechange");
+            final String[] sa = csv.substring(k + 2).split(",");
+            map.put("name", csv.substring(0, k).replace("\"", ""));
+
+            try {
+                if (1 <= sa.length) map.put("last", "$ " + df2.format(Double.valueOf(sa[0].replace("\"", ""))));
+                if (2 <= sa.length)
+                    map.put("previousclose", "$ " + df2.format(Double.valueOf(sa[1].replace("\"", ""))));
+            } catch (NumberFormatException e) {
+                // intentionally empty
+            }
+
+            if (3 <= sa.length) {
+                final String[] saa = sa[2].split(" - ");
+                if (1 <= saa.length) map.put("change", saa[0].replace("\"", ""));
+                if (2 <= saa.length) map.put("percentagechange", saa[1].replace("\"", ""));
+            }
+            if (map.containsKey(Exception.class.getSimpleName())) {
+                s = "Maybe a Server Problem ?";
+            } else if ("$ 0.00".equals(map.get("last"))) {
+                s = "I don't think you gave me a valid TICKER symbol.";
+            } else {
+                s = map.get("name") + " was last traded at "
+                        + map.get("last") + " while the previous close was at "
+                        + map.get("previousclose") + ". That constitutes a change of "
+                        + map.get("change") + " or "
+                        + map.get("percentagechange");
+            }
         }
-        Bundle data = new Bundle();
+        final Bundle data = new Bundle();
         data.putString(Bot2.BUNDLE_KEY_NAME_FOR_MSG, s);
-        Message msg = new Message();
+        final Message msg = new Message();
         msg.setData(data);
         mHandler.sendMessage(msg);
     }

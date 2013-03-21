@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
+// Copyright (c) 2012-2013 Wolf Paulus - Techcasita Productions
 package com.techcasita.android.bot2;
 
 import android.app.Activity;
@@ -30,7 +30,7 @@ public class Bot2 extends Activity implements TextToSpeech.OnInitListener {
 
     public static final String BUNDLE_KEY_NAME_FOR_MSG = Bot2.class.getName() + "_BUNDLE_KEY";
 
-    private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = R.integer.VOICE_RECOGNITION_REQUEST_CODE;
     private static final String UTTERANCE_ID = Bot2.class.getSimpleName();
     private static final String KEY_WORD = "stock quote";
 

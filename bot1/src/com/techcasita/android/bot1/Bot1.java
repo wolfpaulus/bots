@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
+// Copyright (c) 2012-2013 Wolf Paulus - Techcasita Productions
 package com.techcasita.android.bot1;
 
 import android.app.Activity;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author <a href="mailto:wolf@wolfpaulus.com">Wolf Paulus</a>
  */
 public class Bot1 extends Activity implements TextToSpeech.OnInitListener {
-    private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
+    private static final int VOICE_RECOGNITION_REQUEST_CODE = R.integer.VOICE_RECOGNITION_REQUEST_CODE;
     private static final String UTTERANCE_ID = Bot1.class.getSimpleName();
 
     private TextView mTV_TTS;

@@ -1,4 +1,4 @@
-// Copyright (c) 2012 Wolf Paulus - Tech Casita Productions
+// Copyright (c) 2012-201 Wolf Paulus - Tech Casita Productions
 package com.techcasita.android.bot3;
 
 import android.os.AsyncTask;
@@ -25,7 +25,7 @@ import java.util.List;
 public class AIML_RPC extends AsyncTask<String, Void, String> {
     private static final String LOG_TAG = AIML_RPC.class.getSimpleName();
 
-    private static final URI WS_URI = URI.create("http://proton.techcasita.com:8080/talk-xml");
+    private static final URI WS_URI = URI.create("http://vega.techcasita.com:8080/talk-xml");
     private static final String BOT_ID = "xght%^30YH6404uII9";
     private static final String PARAM_NAME_BOT = "botid";
     private static final String PARAM_NAME_TEXT = "input";
