@@ -1,3 +1,6 @@
+This repository contains the source code mentioned during my presentation: "Voice User Interface
+How to voice-enable your mobile application", which i sfeatured on SpeakerDeck and SlideShare. The slides can also be found on my Website here: https://wolfpaulus.com/slides/
+
 "What does a weasel look like?" 
 We are taking a closer look at Android's Speech-To-Text (STT) and 
 Text-To-Speech (TTS) capabilities - and will develop and deploy three small apps, 
